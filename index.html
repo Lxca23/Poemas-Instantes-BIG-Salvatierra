@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antología Poética "Instantes" - Bachillerato Integral Salvatierra</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #e9eff5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Georgia', serif;
+            padding: 20px;
+        }
+
+        /* Contenedor Principal del Libro */
+        .book-container {
+            position: relative;
+            width: 900px;
+            height: 580px;
+            perspective: 1500px;
+        }
+
+        /* Estructura del Libro Abierto */
+        .book {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        /* Hojas del libro (Doble Página) */
+        .page-pair {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        /* Página Activa */
+        .page-pair.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Mitad Izquierda y Mitad Derecha */
+        .page-left, .page-right {
+            width: 50%;
+            height: 100%;
+            background-color: #ffffff;
+            padding: 45px 40px;
+            border: 1px solid #d3dbe3;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decoración de Bordes Elegantes (Esquinas Artísticas) */
+        .page-left::before, .page-right::before {
+            content: "";
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 1px solid rgba(0, 45, 98, 0.08);
+            pointer-events: none;
+        }
+
+        /* PORTADA (Página Inicial Derecha) */
+        .portada-bg {
+            background: linear-gradient(135deg, #002d62 0%, #004080 100%);
+            color: white;
+            text-align: center;
+            justify-content: center !important;
+            align-items: center;
+        }
+        .portada-bg::before {
+            border: 2px solid rgba(255, 255, 255, 0.15);
+        }
+        .portada-bg h1 {
+            font-size: 2.8rem;
+            margin: 15px 0;
+            letter-spacing: 2px;
+            font-weight: normal;
+        }
+        .portada-bg h2 {
+            font-size: 1rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin: 4px 0;
+            opacity: 0.9;
+        }
+        .portada-bg .sub {
+            font-size: 1.3rem;
+            font-style: italic;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        /* ESTILOS DE TEXTO */
+        .title-section {
+            color: #002d62;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 45, 98, 0.2);
+            padding-bottom: 5px;
+        }
+        .content-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #2b2b2b;
+            text-align: justify;
+            flex-grow: 1;
+        }
+        .poem-text {
+            font-style: italic;
+            white-space: pre-line;
+            text-align: left;
+            padding-left: 15px;
+            border-left: 3px solid #002d62;
+        }
+        .footer-tag {
+            font-size: 0.75rem;
+            color: #7b8a99;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #edf1f5;
+            padding-top: 8px;
+            margin-top: 10px;
+            font-family: sans-serif;
+        }
+
+        /* CONTROLES DE HOJEADA (BOTONES) */
+        .controls {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .btn-turn {
+            background-color: #002d62;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-family: sans-serif;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-turn:hover {
+            background-color: #004080;
+        }
+        .btn-turn:active {
+            transform: scale(0.98);
+        }
+        .page-counter {
+            font-family: sans-serif;
+            color: #4a5568;
+            font-size: 0.95rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        /* Adaptación pantallas medianas */
+        @media (max-width: 950px) {
+            .book-container { width: 100%; height: auto; aspect-ratio: 900/580; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="book-container">
+        <div class="book" id="digitalBook">
+            
+            <!-- BLOQUE 1: PORTADA Y PRÓLOGO I -->
+            <div class="page-pair active">
+                <div class="page-left" style="background-color: #f4f6f9; justify-content: center; align-items: center;">
+                    <p style="color: #a0aec0; font-style: italic; font-size: 0.9rem;">Antología Poética "Instantes"</p>
+                </div>
+                <div class="page-right portada-bg">
+                    <h2>GOBIERNO DEL ESTADO DE GUANAJUATO</h2>
+                    <h2>SECRETARÍA DE EDUCACIÓN</h2>
+                    <br>
+                    <h2 style="font-weight: bold;">BACHILLERATO INTEGRAL GUANAJUATO</h2>
+                    <p style="font-size: 0.85rem; opacity: 0.8;">PLANTEL SALVATIERRA</p>
+                    <div style="height: 1px; width: 50px; background-color: #fff; margin: 15px 0;"></div>
+                    <h1>"INSTANTES"</h1>
+                    <p class="sub">Libro Digital de Poemas</p>
+                    <p style="font-size: 0.8rem; opacity: 0.7; position: absolute; bottom: 30px;">Salvatierra, Gto. — 2026</p>
+                </div>
+            </div>
+
+            <!-- BLOQUE 2: PRÓLOGO II Y III -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">Prólogo</h3>
+                    <div class="content-text">
+                        La poesía nace, muchas veces, en los lugares más cotidianos: en una conversación inconclusa, en una despedida, en una tarde de lluvia, en una sonrisa inesperada o en aquellos pensamientos que guardamos en silencio al final del día. Este libro surge precisamente de ese espacio íntimo y auténtico donde las emociones buscan ser nombradas y las experiencias encuentran refugio en las palabras dentro del <strong>BACHILLERATO INTEGRAL GUANAJUATO, Plantel Salvatierra</strong>.
+                        <br><br>
+                        La presente recopilación reúne poemas escritos por alumnos de dicho bachillerato, jóvenes que, desde su propia sensibilidad, se atrevieron a plasmar fragmentos de su diario vivir, recuerdos, inquietudes, sueños, alegrías, miedos y momentos que han dejado huella en su camino. Cada texto representa una mirada única hacia su mundo interior y hacia la realidad que los rodea.
+                    </div>
+                    <div class="footer-tag"><span>Palabras que abrazan el alma</span><span>I</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">Prólogo</h3>
+                    <div class="content-text">
+                        En una etapa de la vida donde las emociones suelen vivirse con intensidad y donde las preguntas sobre el futuro, la identidad y los afectos se hacen presentes, la escritura se convierte en una herramienta poderosa de expresión y autoconocimiento. A través de esta actividad desarrollada dentro de la materia de Artes, se buscó brindar a los estudiantes un espacio libre para crear, sentir y expresar, dejando de lado las estructuras rígidas o las reglas formales de la escritura dramática o poética.
+                        <br><br>
+                        Lo más importante fue permitir que cada palabra naciera desde la honestidad. Este proyecto, guiado por la <strong>Lic. Marcela Gloria López Pacheco</strong> docente de la materia de Artes y por personal de la institución, responde a la necesidad de acercar a los jóvenes al arte desde una perspectiva sensible y humana.
+                    </div>
+                    <div class="footer-tag"><span>Palabras que abrazan el alma</span><span>II</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 3: PRÓLOGO IV Y POEMA 1 -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">Prólogo</h3>
+                    <div class="content-text">
+                        Demostrando que escribir también es una forma de sanar, recordar, transformar y comprender aquello que muchas veces resulta difícil expresar de manera cotidiana.
+                        Los poemas que integran esta obra han sido publicados de manera anónima, permitiendo que el lector se concentre en la esencia de cada texto y en la emoción que transmite, recordándonos que los sentimientos, aunque nacen de experiencias individuales, suelen encontrar eco en muchas otras vidas. 
+                        <br><br>
+                        Cada página de este libro guarda voces jóvenes que decidieron hablar desde el corazón. Que este recorrido poético invite al lector a detenerse por un momento, sentir profundamente y recordar que el arte siempre será un puente entre lo que vivimos y lo que somos.
+                        <br><br>
+                        <em>Bienvenidos a estas páginas donde la vida cotidiana se convierte en poesía.</em>
+                    </div>
+                    <div class="footer-tag"><span>Palabras que abrazan el alma</span><span>III</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">El eco del cuaderno</h3>
+                    <div class="content-text poem-text">Hace ya tiempo que mi pluma guarda silencio,
+la libreta descansa, envuelta en el olvido,
+la tinta, en su encierro, ha perdido su aliento,
+y al mirar el espejo, me siento un extraño ante lo vivido.
+
+He perdido la práctica de nombrar mis tristezas,
+aquellas palabras que antes fluían sin freno;
+pareceían tan ciertas, cargadas de dudas y certezas,
+pero hoy se han vuelto un recuerdo ajeno.
+
+Me pregunto si es el cambio, este nuevo camino,
+o simplemente el curso natural de mi propia historia,
+pues aunque ya no duela lo mismo, y sea otro mi destino,
+busco en el papel recuperar un fragmento de mi memoria.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>1</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 4: POEMA 2 (COMPLETO) -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">El color que perdimos</h3>
+                    <div class="content-text poem-text">Perdona el desencuentro y los fragmentos,
+que las cosas no fueran el reflejo de tu afán.
+Perdón por no colmar tus sentimientos,
+por los días grises que no volverán.
+
+Discúlpame las horas de amargura,
+los problemas que el tiempo no sanó,
+el haberme quedado en la postura
+de quien, queriendo amar, te hizo infeliz y te dañó.
+
+Pero duele aceptar la cruda espina,
+saber que mi cariño fue un despojo,
+que mi dolor, al ver que se termina,
+jamás causó un destello en tus ojos.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>2</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">El color que perdimos</h3>
+                    <div class="content-text poem-text">Aun así, no niego tu llegada,
+el propósito santo de tu paso;
+fui feliz en tu orilla, en tu mirada,
+y dibujé un futuro en tu regazo.
+
+Me apresuré a soñar con el destino,
+a pedirle a la vida que fueras el final,
+el último amor en mi camino,
+un refugio sagrado y eterno contra el mal.
+
+Nos lanzamos palabras como rocas,
+con crueldad unas veces, otras sin querer,
+y en ese fuego que brotó en las bocas,
+el color de lo nuestro se empezó a perder.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>3</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 5: POEMA 3 Y POEMA 4 -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">Lo eterno en tus ojos</h3>
+                    <div class="content-text poem-text">Hoy el mundo se mueve con prisa,
+todo pasa, se olvida y se va;
+es fugaz el dolor y la risa,
+nada parece que durará.
+
+Pero yo no busco el momento,
+ni un afecto que sea de papel;
+yo quiero un amor de cimiento,
+que resista al invierno en la piel.
+
+Quiero un "siempre" de esos que duran,
+una historia que no tenga fin...
+
+Esa niña que, casi jugando,
+sin saber el poder que tenía,
+se adueñó de mi vida y mi canto,
+y me dio una razón cada día.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>4</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">Mi mano en tu camino</h3>
+                    <div class="content-text poem-text">Quiero que sepas, cuando el cielo ruede
+y el mundo cambie de color y dirección,
+que aquí estaré, mientras la vida quede,
+como un faro que cuida tu estación.
+
+En cada paso que tus pies ensayen,
+en cada sueño que decidas perseguir,
+no habrá cansancio, aunque las fuerzas fallen,
+para ayudarte a construir tu porvenir.
+
+Seré el apoyo en tus jornadas frías,
+el compañero que comparta tu andar,
+la mano firme que en los peores días
+te dé el impulso para continuar.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>5</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 6: POEMA 5 Y POEMA 6 -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">Tu refugio y mi tesoro</h3>
+                    <div class="content-text poem-text">Quiero borrar de tu almanaque el frío,
+que a mi lado no encuentres sinsabores;
+cambiar las noches de tu desvarío
+por los días más bellos y mejores.
+
+Seré el escudo que aleje tus temores,
+el tierno refugio donde el viento calla,
+y para ese corazón de mil dolores,
+la cura dulce que gane tu batalla.
+
+Quiero ser el vendaje de tu herida,
+y cuidar el rincón de tu alma herida
+como el tesoro más preciado de mi alma.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>6</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">Huellas en el Alma</h3>
+                    <div class="content-text poem-text">El mundo es un constante ir y venir,
+un cruce de caminos y de gentes,
+almas que llegan para intervenir
+y transformarnos de formas diferentes.
+
+No hay azar en el viento que te trajo,
+ni error en el momento del adiós;
+cada historia que el destino aquí tejió
+dejó una enseñanza bajo su legajo.
+
+Tú pasaste por mi vida como un faro...
+Tu huella fue enseñarme, despacio,
+el verdadero significado de amar.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>7</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 7: POEMA 7 Y POEMA 8 -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">Promesa y Motor</h3>
+                    <div class="content-text poem-text">En el mapa de mis días compartidos,
+nunca habrá un trazo que te cause herida;
+tus secretos y tus pasos están protegidos,
+en el refugio firme de mi vida.
+
+Me entregaste tu fe sin condiciones,
+un voto silencioso y verdadero;
+y ante el altar de tus buenas intenciones,
+ser el guardián de esa confianza quiero.
+
+Fuiste el viento que avivó mi hoguera,
+gracias por ser impulso y alegría,
+y por dejar mi propia fuerza despierta.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>8</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">Dulce Constancia</h3>
+                    <div class="content-text poem-text">Te amo más allá de las palabras,
+donde el lenguaje calla y se arrodilla;
+en ese espacio donde tú te labras
+como la luz que en mi interior más brilla.
+
+Más allá del reloj y su medida,
+más allá de la distancia y el olvido;
+este amor no se limita con la vida,
+
+Eres la brújula en mis días ciegos,
+mi amor eterno, mi norte verdadero,
+mi bendición y mi dulce constancia.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>9</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 8: POEMA 9 Y POEMA 10 -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">El Intento del Alma</h3>
+                    <div class="content-text poem-text">Es difícil hallar el verbo exacto,
+la frase fiel que explique lo que siento;
+pero hoy rompo el silencio de mi pacto
+y lanzo mi verdad a todo el viento.
+
+Desde el primer instante en que te vi,
+un golpe de intuición me dio la calma;
+supe que había algo especial en ti,
+
+Cada vez que la vida nos acerca
+mi corazón de pronto se acelera,
+late con fuerza, libre y evidente.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>10</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">La Culpa Compartida</h3>
+                    <div class="content-text poem-text">Quisiera congelar el segundero
+y regresar al punto de partida;
+volver a andar el tiempo que más quiero,
+pero esta vez con la lección sabida.
+
+Girar el mapa de los días juntos
+y repetir la historia que escribimos,
+
+Aunque el orgullo a veces nos detenga
+no hay un culpable que la culpa tenga,
+ambos fallamos por igual, de frente.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>11</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 9: POEMA 11 (COMPLETO) -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">La Pieza Perfecta</h3>
+                    <div class="content-text poem-text">Tu sonrisa es un rayo de luz pura
+que rompe el gris de los días más oscuros;
+cada palabra tuya es una cura,
+un puente firme sobre mis muros.
+
+Hay una conexión que nos abraza,
+un hilo místico en cada gesto tuyo;
+contigo el alma encuentra su casa,
+y el mundo afuera pierde su barullo.
+
+Se siente como un sueño que no acaba,
+donde el dolor y el tiempo no importan nada;
+la perfección que el corazón buscaba,
+en tu mirada quedó resguardada.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>12</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">La Pieza Perfecta</h3>
+                    <div class="content-text poem-text">Tu amor me dio una nueva perspectiva,
+me abrió los ojos a un nuevo destino;
+y me enseñó, de forma definitiva,
+cuál es el gozo real del camino.
+
+Cada segundo que juntos pasamos
+es un tesoro que el pecho atesora;
+con cada historia que aquí dibujamos,
+nuestro vínculo crece y mejora.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>13</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 10: POEMA 12 Y POEMA 13 -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">Tan Infinito como el Mar</h3>
+                    <div class="content-text poem-text">Quiero decirte hoy que te amo,
+con la certeza de quien mira el horizonte;
+porque este amor que por ti proclamo
+no tiene fin, ni cumbre, ni monte.
+
+Es como el mar que se extiende en la mirada,
+donde se ve el inicio, claro y cristalino,
+pero su fondo y su extensión sagrada
+no tienen fin en todo el camino.
+
+Y cada vez que te tengo de frente,
+el suelo tiembla ante tanta hermosura;
+me dan ganas de caerme, de repente.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>14</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">El Tatuaje de la Media Noche</h3>
+                    <div class="content-text poem-text">Aunque el destino dicte su sentencia
+y nuestros pasos no sigan el mismo rumbo,
+no habrá distancia que borre tu presencia,
+ni olvido que me mueva de este mundo.
+
+Te llevaré clavada en el pensamiento,
+y en un corazón que arde con tu historia.
+
+Te apoderaste de todos mis sentidos,
+donde tus ojos, como fuegos encendidos,
+quedaron tatuados para siempre.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>15</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 11: POEMA 14 Y POEMA 15 -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">Entre el Enigma y la Esperanza</h3>
+                    <div class="content-text poem-text">El firmamento es un manto de misterio,
+con mil estrellas que no alcanzo a tocar;
+así es el brillo de tu propio imperio,
+con esas miradas que no logro descifrar.
+
+Nos lastimamos con la misma fuerza
+con la que ayer supimos abrazarnos;
+pero hay una fe que no se tuerce,
+un sueño terco de volver a encontrarnos.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>16</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">El Brillo que no se Apaga</h3>
+                    <div class="content-text poem-text">El tiempo ha transformado tu camino,
+tu pecho ya no late con mi nombre;
+aceptó tu silencio mi destino,
+aunque el dolor a veces me deslumbre.
+
+Qué raro es este juego de la mente,
+que avanza el mundo y yo sigo encallado;
+te fuiste tú, de forma tan ausente,
+y yo sigo de ti igual de enamorado.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>17</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 12: POEMA 16 Y POEMA 17 -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">El primer recuerdo</h3>
+                    <div class="content-text poem-text">Aún recuerdo muy bien la primera vez, 
+los nervios que el pecho me hacían vibrar; 
+con solo mirar tus ojos, tal vez, 
+el mundo por completo se vio cambiar.
+
+Llevabas puesto aquel vestido floreado, 
+te veías tan bella, tan llena de luz, 
+con tus labios rojos que me han cautivado.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>18</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">El único refugio</h3>
+                    <div class="content-text poem-text">Te confieso que fuiste la única persona
+con la que realmente me sentía cómodo,
+el único rincón donde mi alma razona
+y el único espacio en el que no sentí frío.
+
+A tu lado encontré la total libertad
+de mostrarme tal cual, sin ningún disfraz,
+me diste el valor y la seguridad.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>19</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 13: POEMA 18 Y POEMA 19 -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">Una promesa mutua</h3>
+                    <div class="content-text poem-text">Hoy paso a decirte que eres alguien
+muy importante, una persona clave que
+alegra mis días, y quiero que sepas,
+de forma constante, que siempre estaré
+junto a tus alegrías.
+
+Es una certeza que me llena de paz:
+así como yo siempre estaré para ti,
+sé que en mi camino nunca me faltarás.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>20</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">Lo que iba a ser nuestro</h3>
+                    <div class="content-text poem-text">Me alegra saber que estás feliz,
+pero es extraño ver desde afuera
+que todo lo que planeamos juntos,
+hoy con alguien más lo construyeras.
+
+Yo hubiera dado la vida entera
+por ver esa promesa cumplida,
+por ese "juntos para siempre".</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>21</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 14: POEMA 20 Y POEMA 21 -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">La pieza que faltaba</h3>
+                    <div class="content-text poem-text">Tu sonrisa es como un rayo de sol
+que ilumina mi día más oscuro,
+me quedo viéndote como un bobo
+y de lo que siento estoy muy seguro.
+
+Estar a tu lado es como un gran sueño
+donde todo es perfecto y no hay dolor,
+Contigo encontré al fin la calma,
+la pieza que le faltaba a mi alma.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>22</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">Aunque todo se acabe</h3>
+                    <div class="content-text poem-text">Aunque el sol se apague de repente
+y el mar se quede seco en un segundo,
+aunque un terremoto muy potente
+rompa en pedazos todo este mundo.
+
+Podrá acabarse la vida y el calor,
+pero jamás se apagará mi amor.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"<span>Fin</span></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- BOTONES DE NAVEGACIÓN SENCILLOS -->
+    <div class="controls">
+        <button class="btn-turn" id="prevBtn">◀ Anterior</button>
+        <span class="page-counter" id="pageIdx">1 / 14</span>
+        <button class="btn-turn" id="nextBtn">Siguiente ▶</button>
+    </div>
+
+    <script>
+        // Lógica de hojeado interactivo simplificado sin librerías externas
+        const pagePairs = document.querySelectorAll('.page-pair');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const pageIdxLabel = document.getElementById('pageIdx');
+        let currentIdx = 0;
+
+        function updateBookPages() {
+            pagePairs.forEach((pair, idx) => {
+                if (idx === currentIdx) {
+                    pair.classList.add('active');
+                } else {
+                    pair.classList.remove('active');
+                }
+            });
+            pageIdxLabel.textContent = `${currentIdx + 1} / ${pagePairs.length}`;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIdx > 0) {
+                currentIdx--;
+                updateBookPages();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIdx < pagePairs.length - 1) {
+                currentIdx++;
+                updateBookPages();
+            }
+        });
+    </script>
+</body>
+</html>
