@@ -18,15 +18,19 @@
             align-items: center;
             min-height: 100vh;
             font-family: 'Georgia', serif;
-            padding: 15px;
+            padding: 20px;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
 
-        /* CONTENEDOR PRINCIPAL RESPONSIVE */
+        /* CONTENEDOR PRINCIPAL DEL LIBRO (DOBLE PÁGINA) */
         .book-container {
             position: relative;
             width: 100%;
-            max-width: 900px; /* Tamaño máximo en computadora */
-            height: 580px;
+            max-width: 1100px;
+            height: 600px;
             perspective: 1500px;
         }
 
@@ -35,10 +39,12 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            background-color: #ffffff;
+            border-radius: 4px;
         }
 
-        /* Estructura del par de páginas */
+        /* BLOQUES DE DOS PÁGINAS (IZQUIERDA Y DERECHA) */
         .page-pair {
             position: absolute;
             width: 100%;
@@ -48,7 +54,7 @@
             display: flex;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease-in-out;
+            transition: opacity 0.4s ease-in-out;
         }
 
         .page-pair.active {
@@ -56,13 +62,12 @@
             pointer-events: auto;
         }
 
-        /* Lado Izquierdo y Derecho estándar */
+        /* ESTILO BASE DE CADA HOJA INDIVIDUAL */
         .page-left, .page-right {
             width: 50%;
             height: 100%;
             background-color: #ffffff;
-            padding: 40px 35px;
-            border: 1px solid #d3dbe3;
+            padding: 45px 40px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -70,16 +75,25 @@
             overflow: hidden;
         }
 
-        /* Bordes decorativos elegantes */
+        /* Línea divisoria central que simula el lomo del libro abierto */
+        .page-left {
+            border-right: 1px solid rgba(0, 0, 0, 0.15);
+            box-shadow: inset -15px 0 20px rgba(0,0,0,0.05);
+        }
+        .page-right {
+            box-shadow: inset 15px 0 20px rgba(0,0,0,0.05);
+        }
+
+        /* Marcos interiores elegantes */
         .page-left::before, .page-right::before {
             content: "";
             position: absolute;
-            top: 15px; left: 15px; right: 15px; bottom: 15px;
-            border: 1px solid rgba(0, 45, 98, 0.08);
+            top: 20px; left: 20px; right: 20px; bottom: 20px;
+            border: 1px solid rgba(0, 45, 98, 0.06);
             pointer-events: none;
         }
 
-        /* PORTADA */
+        /* ESTILOS DE PORTADA Y CONTRAPORTADA */
         .portada-bg {
             background: linear-gradient(135deg, #002d62 0%, #004080 100%);
             color: white;
@@ -91,7 +105,7 @@
             border: 2px solid rgba(255, 255, 255, 0.15);
         }
         .portada-bg h1 {
-            font-size: 2.6rem;
+            font-size: 2.8rem;
             margin: 15px 0;
             letter-spacing: 2px;
             font-weight: normal;
@@ -104,33 +118,33 @@
             opacity: 0.9;
         }
         .portada-bg .sub {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-style: italic;
             opacity: 0.8;
             margin-bottom: 25px;
         }
 
-        /* TEXTOS */
+        /* TIPOGRAFÍAS Y CONTENIDOS */
         .title-section {
             color: #002d62;
-            font-size: 1.3rem;
-            margin-bottom: 12px;
+            font-size: 1.35rem;
+            margin-bottom: 15px;
             border-bottom: 1px solid rgba(0, 45, 98, 0.2);
-            padding-bottom: 5px;
+            padding-bottom: 6px;
         }
         .content-text {
-            font-size: 0.95rem;
-            line-height: 1.5;
+            font-size: 0.98rem;
+            line-height: 1.6;
             color: #2b2b2b;
             text-align: justify;
             flex-grow: 1;
-            overflow-y: auto; /* Permite scroll interno si el poema es largo */
+            overflow-y: auto;
         }
         .poem-text {
             font-style: italic;
             white-space: pre-line;
             text-align: left;
-            padding-left: 12px;
+            padding-left: 15px;
             border-left: 3px solid #002d62;
         }
         .footer-tag {
@@ -144,18 +158,18 @@
             font-family: sans-serif;
         }
 
-        /* BOTONES DE CONTROL */
+        /* SECCIÓN DE BOTONES */
         .controls {
-            margin-top: 20px;
+            margin-top: 25px;
             display: flex;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
         }
         .btn-turn {
             background-color: #002d62;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-size: 0.95rem;
             font-family: sans-serif;
             border-radius: 4px;
@@ -169,54 +183,57 @@
         .page-counter {
             font-family: sans-serif;
             color: #4a5568;
-            font-size: 0.95rem;
-            min-width: 80px;
+            font-size: 1rem;
+            min-width: 90px;
             text-align: center;
         }
 
-        /* 📱 RESPONSIVE: REGLAS ADAPTATIVAS PARA CELULARES Y TABLETS */
+        /* 📱 NUEVO RESPONSIVE ADAPTATIVO: MANTIENE DOBLE PÁGINA EN IPHONE/CELULARES */
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 5px;
             }
+            /* Reducimos la altura en móvil para que quepa bien junto con los botones */
             .book-container {
-                height: 70vh; /* Se adapta a la altura disponible de la pantalla del cel */
+                height: 420px; 
             }
-            /* Ocultamos la página izquierda vacía de la portada en cel */
-            .page-pair .page-left-hidden {
-                display: none !important;
-            }
-            /* Hacemos que cada hoja ocupe el 100% del ancho del cel (una sola página a la vez) */
+            /* Forzamos a que sigan midiendo 50% cada una (Doble hoja activa) */
             .page-left, .page-right {
-                width: 100% !important;
-                padding: 30px 20px;
+                width: 50% !important;
+                display: flex !important;
+                padding: 15px 12px; /* Reducción de márgenes internos para que el texto no se desborde */
             }
-            /* Convertimos el contenedor doble en un flujo de una sola página por bloque */
-            .page-pair {
-                flex-direction: column;
+            .page-left-hidden {
+                display: flex !important;
             }
-            /* Si un bloque tiene texto tanto en izquierda como derecha en cel, mostramos solo la activa mediante JS o scroll */
-            .page-left {
-                display: none; /* En vista móvil priorizaremos avanzar página por página */
+            /* Ajustes decorativos interiores en móvil */
+            .page-left::before, .page-right::before {
+                top: 8px; left: 8px; right: 8px; bottom: 8px;
             }
-            .page-pair.active .page-left, .page-pair.active .page-right {
-                display: flex;
-            }
-            /* Ajuste de fuentes para celulares */
-            .portada-bg h1 { font-size: 2rem; }
-            .title-section { font-size: 1.15rem; }
-            .content-text { font-size: 0.85rem; }
+            /* Escalado proporcional de textos para pantallas pequeñas */
+            .portada-bg h1 { font-size: 1.3rem; margin: 5px 0; }
+            .portada-bg h2 { font-size: 0.55rem; }
+            .portada-bg .sub { font-size: 0.75rem; margin-bottom: 10px; }
+            .title-section { font-size: 0.8rem; margin-bottom: 6px; padding-bottom: 3px; }
+            .content-text { font-size: 0.62rem; line-height: 1.3; }
+            .poem-text { padding-left: 6px; border-left-width: 2px; }
+            .footer-tag { font-size: 0.55rem; padding-top: 4px; margin-top: 4px; }
+            .portada-bg style, p, div { font-size: 0.6rem; }
+            .controls { margin-top: 15px; gap: 10px; }
+            .btn-turn { padding: 8px 16px; font-size: 0.8rem; }
+            .page-counter { font-size: 0.85rem; min-width: 70px; }
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
     <div class="book-container">
         <div class="book" id="digitalBook">
             
+            <!-- BLOQUE 1: PORTADA -->
             <div class="page-pair active">
-                <div class="page-left page-left-hidden" style="background-color: #f4f6f9; justify-content: center; align-items: center;">
-                    <p style="color: #a0aec0; font-style: italic; font-size: 0.9rem;">Antología Poética "Instantes"</p>
+                <div class="page-left page-left-hidden" style="background-color: #f8fafc; justify-content: center; align-items: center;">
+                    <p style="color: #718096; font-style: italic; font-size: 0.95rem;">Antología Poética "Instantes"</p>
                 </div>
                 <div class="page-right portada-bg">
                     <h2>GOBIERNO DEL ESTADO DE GUANAJUATO</h2>
@@ -224,15 +241,16 @@
                     <br>
                     <h2 style="font-weight: bold;">BACHILLERATO INTEGRAL GUANAJUATO</h2>
                     <p style="font-size: 0.85rem; opacity: 0.8;">PLANTEL SALVATIERRA</p>
-                    <div style="height: 1px; width: 50px; background-color: #fff; margin: 15px 0;"></div>
+                    <div style="height: 1px; width: 60px; background-color: #fff; margin: 20px 0;"></div>
                     <h1>"INSTANTES"</h1>
                     <p class="sub">Libro Digital de Poemas</p>
-                    <p style="font-size: 0.8rem; opacity: 0.7; position: absolute; bottom: 30px;">Salvatierra, Gto. — 2026</p>
+                    <p style="font-size: 0.8rem; opacity: 0.7; position: absolute; bottom: 35px;">Salvatierra, Gto. — 2026</p>
                 </div>
             </div>
 
+            <!-- BLOQUE 2: PRÓLOGO (PÁGINAS I Y II) -->
             <div class="page-pair">
-                <div class="page-right">
+                <div class="page-left">
                     <h3 class="title-section">Prólogo</h3>
                     <div class="content-text">
                         La poesía nace, muchas veces, en los lugares más cotidianos: en una conversación inconclusa, en una despedida, en una tarde de lluvia, en una sonrisa inesperada o en aquellos pensamientos que guardamos en silencio al final del día. Este libro surge precisamente de ese espacio íntimo y auténtico donde las emociones buscan ser nombradas y las experiencias encuentran refugio en las palabras dentro del <strong>BACHILLERATO INTEGRAL GUANAJUATO, Plantel Salvatierra</strong>.
@@ -241,9 +259,6 @@
                     </div>
                     <div class="footer-tag"><span>Palabras que abrazan el alma</span><span>I</span></div>
                 </div>
-            </div>
-
-            <div class="page-pair">
                 <div class="page-right">
                     <h3 class="title-section">Prólogo</h3>
                     <div class="content-text">
@@ -255,8 +270,9 @@
                 </div>
             </div>
 
+            <!-- BLOQUE 3: PRÓLOGO III Y POEMA 1 -->
             <div class="page-pair">
-                <div class="page-right">
+                <div class="page-left">
                     <h3 class="title-section">Prólogo</h3>
                     <div class="content-text">
                         Demostrando que escribir también es una forma de sanar, recordar, transformar y comprender aquello que muchas veces resulta difícil expresar de manera cotidiana.
@@ -268,9 +284,6 @@
                     </div>
                     <div class="footer-tag"><span>Palabras que abrazan el alma</span><span>III</span></div>
                 </div>
-            </div>
-
-            <div class="page-pair">
                 <div class="page-right">
                     <h3 class="title-section">El eco del cuaderno</h3>
                     <div class="content-text poem-text">Hace ya tiempo que mi pluma guarda silencio,
@@ -291,8 +304,9 @@ busco en el papel recuperar un fragmento de mi memoria.</div>
                 </div>
             </div>
 
+            <!-- BLOQUE 4: POEMAS 2 Y 3 -->
             <div class="page-pair">
-                <div class="page-right">
+                <div class="page-left">
                     <h3 class="title-section">El color que perdimos</h3>
                     <div class="content-text poem-text">Perdona el desencuentro y los fragmentos,
 que las cosas no fueran el reflejo de tu afán.
@@ -310,9 +324,6 @@ que mi dolor, al ver que se termina,
 jamás causó un destello en tus ojos.</div>
                     <div class="footer-tag"><span>Antología "Instantes"</span><span>2</span></div>
                 </div>
-            </div>
-
-            <div class="page-pair">
                 <div class="page-right">
                     <h3 class="title-section">Lo eterno en tus ojos</h3>
                     <div class="content-text poem-text">Hoy el mundo se mueve con prisa,
@@ -333,8 +344,9 @@ que no habrá despedidas aquí.</div>
                 </div>
             </div>
 
+            <!-- BLOQUE 5: POEMAS 4 Y 5 -->
             <div class="page-pair">
-                <div class="page-right">
+                <div class="page-left">
                     <h3 class="title-section">Mi mano en tu camino</h3>
                     <div class="content-text poem-text">Quiero que sepas, cuando el cielo ruede
 y el mundo cambie de color y dirección,
@@ -352,9 +364,6 @@ la mano firme que en los peores días
 te dé el impulso para continuar.</div>
                     <div class="footer-tag"><span>Antología "Instantes"</span><span>4</span></div>
                 </div>
-            </div>
-
-            <div class="page-pair">
                 <div class="page-right">
                     <h3 class="title-section">Tu refugio y mi tesoro</h3>
                     <div class="content-text poem-text">Quiero borrar de tu almanaque el frío,
@@ -374,8 +383,9 @@ como el tesoro más preciado de mi alma.</div>
                 </div>
             </div>
 
+            <!-- BLOQUE 6: POEMAS 6 Y 7 -->
             <div class="page-pair">
-                <div class="page-right">
+                <div class="page-left">
                     <h3 class="title-section">Huellas en el Alma</h3>
                     <div class="content-text poem-text">El mundo es un constante ir y venir,
 un cruce de caminos y de gentes,
@@ -392,9 +402,6 @@ Tu huella fue enseñarme, despacio,
 el verdadero significado de amar.</div>
                     <div class="footer-tag"><span>Antología "Instantes"</span><span>6</span></div>
                 </div>
-            </div>
-
-            <div class="page-pair">
                 <div class="page-right">
                     <h3 class="title-section">Promesa y Motor</h3>
                     <div class="content-text poem-text">En el mapa de mis días compartidos,
@@ -414,8 +421,9 @@ y por dejar mi propia fuerza despierta.</div>
                 </div>
             </div>
 
+            <!-- BLOQUE 7: POEMAS 8 Y 9 -->
             <div class="page-pair">
-                <div class="page-right">
+                <div class="page-left">
                     <h3 class="title-section">La pieza que faltaba</h3>
                     <div class="content-text poem-text">Tu sonrisa es como un rayo de sol
 que ilumina mi día más oscuro,
@@ -428,9 +436,6 @@ Contigo encontré al fin la calma,
 la pieza que le faltaba a mi alma.</div>
                     <div class="footer-tag"><span>Antología "Instantes"</span><span>8</span></div>
                 </div>
-            </div>
-
-            <div class="page-pair">
                 <div class="page-right">
                     <h3 class="title-section">Aunque todo se acabe</h3>
                     <div class="content-text poem-text">Aunque el sol se apague de repente
@@ -440,16 +445,83 @@ rompa en pedazos todo este mundo.
 
 Podrá acabarse la vida y el calor,
 pero jamás se apagará mi amor.</div>
-                    <div class="footer-tag"><span>Antología "Instantes"<span>Fin</span></div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>9</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 8: INSTANTE ETERNO Y TU AUSENCIA -->
+            <div class="page-pair">
+                <div class="page-left">
+                    <h3 class="title-section">Instante Eterno</h3>
+                    <div class="content-text poem-text">Se congela el tiempo en tu mirada,
+un suspiro que detiene el viento,
+en esta hoja blanca y olvidada,
+dibujo la fuerza de lo que siento.
+
+No hacen falta versos decorados,
+ni rimas presas de una estructura,
+basta con los días que sumamos,
+y la calma de tu arquitectura.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>10</span></div>
+                </div>
+                <div class="page-right">
+                    <h3 class="title-section">Tu ausencia</h3>
+                    <div class="content-text poem-text">En la penumbra de un cuarto una niña sollozaba,
+el pesar de su tristeza aumentaba sus quebrantos,
+ante el cariño faltante del amor infinito,
+que su corazón gritaba y que a su padre llamaba.
+
+Transcurrían los días, la adolescencia llegaba,
+el momento más esperado se anunció sin su presencia,
+en su búsqueda incansable de respuestas,
+solo encuentra vacío y silencio
+de quien no pudo explicar su ausencia.
+
+En su memoria grabados quedaron recuerdos felices
+previo a su partida, instantes que su corazón anhela
+y clama por el abrazo que jamás volvió.
+
+La incertidumbre se tornó como cruel sombra,
+alimentando pensamientos vanos y confusos,
+sin encontrar respuesta a su plegaria,
+cubriendo de desconsuelo la imagen paterna
+que alcanzar deseaba.
+
+Trece años pasaron de desvelos,
+y aquella niña en mujer fue transformada,
+marcada por las huellas del pasado,
+pero fuerte y digna convirtiendo duelo y tristezas en templanza.
+
+Más el sino disipó su angustia, la vida con su misteriosa fuerza,
+logró reunirlos, dejando abierta la esperanza
+de que tanto dolor se multiplique en bienes,
+en recompensa a quien el amor alcanza.</div>
+                    <div class="footer-tag"><span>Antología "Instantes"</span><span>11</span></div>
+                </div>
+            </div>
+
+            <!-- BLOQUE 9: CONTRAPORTADA DE CRÉDITOS FINAL -->
+            <div class="page-pair">
+                <div class="page-left page-left-hidden" style="background-color: #f8fafc; justify-content: center; align-items: center;">
+                    <p style="color: #a0aec0; font-style: italic; font-size: 0.95rem;">Hacia nuevos horizontes poéticos...</p>
+                </div>
+                <div class="page-right" style="background-color: #fafbfc; justify-content: center; align-items: center; text-align: center; padding: 10px;">
+                    <div style="width: 30px; height: 1px; background-color: #002d62; margin-bottom: 15px;"></div>
+                    <p style="font-size: 1.1rem; color: #002d62; font-weight: bold; letter-spacing: 1px;" class="final-title">FIN DE LA ANTOLOGÍA</p>
+                    <p style="font-size: 0.85rem; color: #718096; margin-top: 5px; font-style: italic;" class="final-sub">"Las palabras vuelan, el arte permanece."</p>
+                    <div style="position: absolute; bottom: 35px; left: 10px; right: 10px; font-family: sans-serif; font-size: 0.72rem; color: #a0aec0; font-weight: bold; line-height: 1.4; letter-spacing: 1px;">
+                        DERECHOS RESERVADOS 2026.<br>ING. JOSÉ ALFREDO LÓPEZ CARBAJAL.
+                    </div>
                 </div>
             </div>
 
         </div>
     </div>
 
+    <!-- NAVEGACIÓN -->
     <div class="controls">
         <button class="btn-turn" id="prevBtn">◀ Anterior</button>
-        <span class="page-counter" id="pageIdx">1 / 13</span>
+        <span class="page-counter" id="pageIdx">1 / 9</span>
         <button class="btn-turn" id="nextBtn">Siguiente ▶</button>
     </div>
 
@@ -482,6 +554,22 @@ pero jamás se apagará mi amor.</div>
             if (currentIdx < pagePairs.length - 1) {
                 currentIdx++;
                 updateBookPages();
+            }
+        });
+
+        /* 🔒 SCRIPT DE PROTECCIÓN: BLOQUEO DE TECLAS DE INSPECCIÓN DE CÓDIGO */
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.key === 'i' || e.key === 'j' || e.key === 'c')) {
+                e.preventDefault();
+                return false;
+            }
+            if (e.ctrlKey && (e.key === 'U' || e.key === 'u')) {
+                e.preventDefault();
+                return false;
             }
         });
     </script>
