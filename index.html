@@ -19,6 +19,7 @@
             min-height: 100vh;
             font-family: 'Georgia', serif;
             padding: 20px;
+            /* Evita la selección de texto para mayor protección */
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -188,49 +189,48 @@
             text-align: center;
         }
 
-        /* 📱 NUEVO RESPONSIVE ADAPTATIVO: MANTIENE DOBLE PÁGINA EN IPHONE/CELULARES */
+        /* 📱 RESPONSIVE ADAPTATIVO: UNA PÁGINA VERTICAL COMODA EN CELULARES */
         @media (max-width: 768px) {
             body {
-                padding: 5px;
+                padding: 10px;
             }
-            /* Reducimos la altura en móvil para que quepa bien junto con los botones */
             .book-container {
-                height: 420px; 
+                height: 75vh;
             }
-            /* Forzamos a que sigan midiendo 50% cada una (Doble hoja activa) */
+            .book {
+                background: none;
+                box-shadow: none;
+            }
+            .page-pair {
+                flex-direction: column;
+            }
             .page-left, .page-right {
-                width: 50% !important;
-                display: flex !important;
-                padding: 15px 12px; /* Reducción de márgenes internos para que el texto no se desborde */
+                width: 100% !important;
+                height: 100% !important;
+                padding: 30px 20px;
+                border: 1px solid #d3dbe3;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.05) !important;
             }
+            /* Ocultación y visualización selectiva para priorizar el contenido legible */
             .page-left-hidden {
-                display: flex !important;
+                display: none !important;
             }
-            /* Ajustes decorativos interiores en móvil */
-            .page-left::before, .page-right::before {
-                top: 8px; left: 8px; right: 8px; bottom: 8px;
+            .page-pair.active .page-left {
+                display: none; /* Oculta la hoja izquierda para dar prioridad a la hoja de contenido */
             }
-            /* Escalado proporcional de textos para pantallas pequeñas */
-            .portada-bg h1 { font-size: 1.3rem; margin: 5px 0; }
-            .portada-bg h2 { font-size: 0.55rem; }
-            .portada-bg .sub { font-size: 0.75rem; margin-bottom: 10px; }
-            .title-section { font-size: 0.8rem; margin-bottom: 6px; padding-bottom: 3px; }
-            .content-text { font-size: 0.62rem; line-height: 1.3; }
-            .poem-text { padding-left: 6px; border-left-width: 2px; }
-            .footer-tag { font-size: 0.55rem; padding-top: 4px; margin-top: 4px; }
-            .portada-bg style, p, div { font-size: 0.6rem; }
-            .controls { margin-top: 15px; gap: 10px; }
-            .btn-turn { padding: 8px 16px; font-size: 0.8rem; }
-            .page-counter { font-size: 0.85rem; min-width: 70px; }
+            .page-pair.active .page-right {
+                display: flex; /* Muestra siempre el contenido principal en celulares (incluye contraportada) */
+                height: 100% !important;
+            }
+            .portada-bg h1 { font-size: 2.1rem; }
+            .title-section { font-size: 1.15rem; }
+            .content-text { font-size: 0.88rem; line-height: 1.5; }
         }
     </style>
 </head>
-<body oncontextmenu="return false;">
-
-    <div class="book-container">
+<body oncontextmenu="return false;"> <div class="book-container">
         <div class="book" id="digitalBook">
             
-            <!-- BLOQUE 1: PORTADA -->
             <div class="page-pair active">
                 <div class="page-left page-left-hidden" style="background-color: #f8fafc; justify-content: center; align-items: center;">
                     <p style="color: #718096; font-style: italic; font-size: 0.95rem;">Antología Poética "Instantes"</p>
@@ -248,7 +248,6 @@
                 </div>
             </div>
 
-            <!-- BLOQUE 2: PRÓLOGO (PÁGINAS I Y II) -->
             <div class="page-pair">
                 <div class="page-left">
                     <h3 class="title-section">Prólogo</h3>
@@ -270,7 +269,6 @@
                 </div>
             </div>
 
-            <!-- BLOQUE 3: PRÓLOGO III Y POEMA 1 -->
             <div class="page-pair">
                 <div class="page-left">
                     <h3 class="title-section">Prólogo</h3>
@@ -304,7 +302,6 @@ busco en el papel recuperar un fragmento de mi memoria.</div>
                 </div>
             </div>
 
-            <!-- BLOQUE 4: POEMAS 2 Y 3 -->
             <div class="page-pair">
                 <div class="page-left">
                     <h3 class="title-section">El color que perdimos</h3>
@@ -344,7 +341,6 @@ que no habrá despedidas aquí.</div>
                 </div>
             </div>
 
-            <!-- BLOQUE 5: POEMAS 4 Y 5 -->
             <div class="page-pair">
                 <div class="page-left">
                     <h3 class="title-section">Mi mano en tu camino</h3>
@@ -383,7 +379,6 @@ como el tesoro más preciado de mi alma.</div>
                 </div>
             </div>
 
-            <!-- BLOQUE 6: POEMAS 6 Y 7 -->
             <div class="page-pair">
                 <div class="page-left">
                     <h3 class="title-section">Huellas en el Alma</h3>
@@ -421,7 +416,6 @@ y por dejar mi propia fuerza despierta.</div>
                 </div>
             </div>
 
-            <!-- BLOQUE 7: POEMAS 8 Y 9 -->
             <div class="page-pair">
                 <div class="page-left">
                     <h3 class="title-section">La pieza que faltaba</h3>
@@ -449,7 +443,6 @@ pero jamás se apagará mi amor.</div>
                 </div>
             </div>
 
-            <!-- BLOQUE 8: INSTANTE ETERNO Y TU AUSENCIA -->
             <div class="page-pair">
                 <div class="page-left">
                     <h3 class="title-section">Instante Eterno</h3>
@@ -500,16 +493,15 @@ en recompensa a quien el amor alcanza.</div>
                 </div>
             </div>
 
-            <!-- BLOQUE 9: CONTRAPORTADA DE CRÉDITOS FINAL -->
             <div class="page-pair">
                 <div class="page-left page-left-hidden" style="background-color: #f8fafc; justify-content: center; align-items: center;">
                     <p style="color: #a0aec0; font-style: italic; font-size: 0.95rem;">Hacia nuevos horizontes poéticos...</p>
                 </div>
-                <div class="page-right" style="background-color: #fafbfc; justify-content: center; align-items: center; text-align: center; padding: 10px;">
-                    <div style="width: 30px; height: 1px; background-color: #002d62; margin-bottom: 15px;"></div>
-                    <p style="font-size: 1.1rem; color: #002d62; font-weight: bold; letter-spacing: 1px;" class="final-title">FIN DE LA ANTOLOGÍA</p>
-                    <p style="font-size: 0.85rem; color: #718096; margin-top: 5px; font-style: italic;" class="final-sub">"Las palabras vuelan, el arte permanece."</p>
-                    <div style="position: absolute; bottom: 35px; left: 10px; right: 10px; font-family: sans-serif; font-size: 0.72rem; color: #a0aec0; font-weight: bold; line-height: 1.4; letter-spacing: 1px;">
+                <div class="page-right" style="background-color: #fafbfc; justify-content: center; align-items: center; text-align: center; padding: 20px;">
+                    <div style="width: 40px; height: 1px; background-color: #002d62; margin-bottom: 20px;"></div>
+                    <p style="font-size: 1.1rem; color: #002d62; font-weight: bold; letter-spacing: 1px;">FIN DE LA ANTOLOGÍA</p>
+                    <p style="font-size: 0.85rem; color: #718096; margin-top: 5px; font-style: italic;">"Las palabras vuelan, el arte permanece."</p>
+                    <div style="position: absolute; bottom: 40px; left: 20px; right: 20px; font-family: sans-serif; font-size: 0.75rem; color: #a0aec0; font-weight: bold; line-height: 1.4; letter-spacing: 1px;">
                         DERECHOS RESERVADOS 2026.<br>ING. JOSÉ ALFREDO LÓPEZ CARBAJAL.
                     </div>
                 </div>
@@ -518,7 +510,6 @@ en recompensa a quien el amor alcanza.</div>
         </div>
     </div>
 
-    <!-- NAVEGACIÓN -->
     <div class="controls">
         <button class="btn-turn" id="prevBtn">◀ Anterior</button>
         <span class="page-counter" id="pageIdx">1 / 9</span>
